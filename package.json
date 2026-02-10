@@ -1,7 +1,7 @@
 {
   "name": "web-batachi",
   "private": true,
-  "version": "1.0.3",
+  "version": "1.0.4",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -12,7 +12,7 @@
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-router-dom": "^7.1.5",
-    "@google/genai": "^0.3.0"
+    "@google/genai": "latest"
   },
   "devDependencies": {
     "@types/react": "^19.0.0",
