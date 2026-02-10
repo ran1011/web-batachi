@@ -2,12 +2,19 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { GoogleGenAI } from '@google/genai';
+import { initialBanner } from '../data/menu';
+import { BannerConfig } from '../types';
 
 const Home: React.FC = () => {
   const [dailyQuote, setDailyQuote] = useState<string>("Kemewahan rasa dalam setiap gigitan, disajikan dengan cinta.");
   const [loading, setLoading] = useState(true);
+  const [banner, setBanner] = useState<BannerConfig>(initialBanner);
 
   useEffect(() => {
+    // Load Banner from Local Storage
+    const savedBanner = localStorage.getItem('batachi_banner');
+    if (savedBanner) setBanner(JSON.parse(savedBanner));
+
     async function getDailyInspiration() {
       try {
         const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
@@ -32,7 +39,13 @@ const Home: React.FC = () => {
   }, []);
 
   return (
-    <div className="min-h-screen flex flex-col items-start justify-center relative px-6 md:px-24 pt-32 pb-20">
+    <div className="min-h-screen flex flex-col items-start justify-center relative px-6 md:px-24 pt-32 pb-20 overflow-hidden">
+      {/* Dynamic Background Image Overrider */}
+      <div 
+        className="absolute inset-0 w-full h-full -z-20 bg-cover bg-center opacity-30 transition-all duration-1000"
+        style={{ backgroundImage: `url('${banner.backgroundImage}')` }}
+      ></div>
+
       <div className="relative z-10 max-w-5xl animate-luxury">
         <div className="flex items-center gap-6 mb-12">
             <span className="w-12 md:w-20 h-[1.5px] bg-gold"></span>
@@ -42,8 +55,8 @@ const Home: React.FC = () => {
         </div>
         
         <h1 className="text-6xl md:text-8xl lg:text-[9.5rem] font-bold text-white tracking-tighter leading-[0.9] mb-14 font-serif">
-          Luxury<br />
-          <span className="text-gold italic ml-2 md:ml-10">Refined.</span>
+          {banner.title}<br />
+          <span className="text-gold italic ml-2 md:ml-10">{banner.subtitle}</span>
         </h1>
         
         <div className="max-w-2xl mb-16 relative">
@@ -51,14 +64,6 @@ const Home: React.FC = () => {
           <p className={`text-gray-300 text-xl md:text-3xl font-light italic leading-relaxed transition-all duration-1000 ${loading ? 'opacity-0 translate-x-4' : 'opacity-100 translate-x-0'}`}>
             "{dailyQuote}"
           </p>
-          <div className="flex items-center gap-3 mt-8">
-             <div className="flex gap-1">
-                <div className="w-1.5 h-1.5 rounded-full bg-gold animate-bounce" style={{ animationDelay: '0s' }}></div>
-                <div className="w-1.5 h-1.5 rounded-full bg-gold animate-bounce" style={{ animationDelay: '0.2s' }}></div>
-                <div className="w-1.5 h-1.5 rounded-full bg-gold animate-bounce" style={{ animationDelay: '0.4s' }}></div>
-             </div>
-             <p className="text-gold/50 text-[8px] uppercase tracking-[0.3em] font-bold">Chef's Daily Inspiration</p>
-          </div>
         </div>
         
         <div className="flex flex-wrap gap-10 items-center">
@@ -68,19 +73,7 @@ const Home: React.FC = () => {
           >
             Eksplorasi Menu
           </Link>
-          
-          <div className="flex gap-10 items-center border-l border-white/10 pl-10">
-             <div className="flex flex-col gap-1">
-                <span className="text-gold/40 text-[7px] uppercase tracking-[0.4em] font-bold">Operational</span>
-                <span className="text-[10px] font-bold text-white uppercase tracking-widest">10:00 — 22:00</span>
-             </div>
-          </div>
         </div>
-      </div>
-
-      {/* Decorative Large Letter */}
-      <div className="absolute top-1/2 right-10 -translate-y-1/2 hidden 2xl:block opacity-[0.05] pointer-events-none select-none text-gold">
-        <span className="text-[40rem] font-serif leading-none">B</span>
       </div>
     </div>
   );

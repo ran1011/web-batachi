@@ -2,7 +2,6 @@
 import React, { useState, useEffect } from 'react';
 import { menuData as initialData } from '../data/menu';
 import { MenuItem, MenuCategory } from '../types';
-import MenuCard from '../components/MenuCard';
 
 const Menu: React.FC = () => {
   const [filter, setFilter] = useState<string>('Semua');
@@ -62,7 +61,7 @@ const Menu: React.FC = () => {
                 className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
               />
               <div className="absolute top-4 right-4 bg-black/80 px-3 py-1 rounded-full border border-gold/40 backdrop-blur-md">
-                <span className="text-[10px] font-bold text-gold uppercase tracking-tighter">Rp {item.price.toLocaleString('id-ID')}</span>
+                <span className="text-[10px] font-bold text-gold uppercase tracking-tighter">฿ {item.price.toLocaleString('th-TH')}</span>
               </div>
             </div>
             <div className="p-6">
@@ -74,7 +73,6 @@ const Menu: React.FC = () => {
         ))}
       </div>
 
-      {/* Modal Detail Menu */}
       {selectedItem && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 md:p-6 bg-black/95 backdrop-blur-xl">
           <div className="bg-[#0f0f0f] w-full max-w-6xl rounded-[40px] overflow-hidden flex flex-col md:flex-row relative shadow-2xl border border-white/10 animate-luxury">
@@ -96,15 +94,14 @@ const Menu: React.FC = () => {
               <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-10 mt-auto">
                 <div className="flex flex-col">
                   <span className="text-gold/40 text-[10px] uppercase tracking-widest mb-1">Investment</span>
-                  <span className="text-4xl font-bold text-white font-serif">Rp {selectedItem.price.toLocaleString('id-ID')}</span>
+                  <span className="text-4xl font-bold text-white font-serif">฿ {selectedItem.price.toLocaleString('th-TH')}</span>
                 </div>
                 <a 
                   href={`https://wa.me/628123456789?text=Saya ingin memesan menu BATACHI: ${selectedItem.name}`}
                   target="_blank"
-                  rel="noopener noreferrer"
                   className="w-full sm:w-auto bg-gold text-black px-12 py-5 rounded-full font-bold hover:scale-105 transition-all duration-500 text-[10px] uppercase tracking-[0.3em] text-center gold-shadow"
                 >
-                  Pesan via WhatsApp
+                  Pesan Sekarang
                 </a>
               </div>
             </div>
