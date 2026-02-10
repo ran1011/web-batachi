@@ -9,6 +9,7 @@ import Menu from './pages/Menu';
 import GalleryPage from './pages/GalleryPage';
 import Contact from './pages/Contact';
 import Admin from './pages/Admin';
+import PreOrder from './pages/PreOrder';
 
 const ScrollToTop = () => {
   const { pathname } = useLocation();
@@ -34,6 +35,7 @@ const App: React.FC = () => {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/menu" element={<Menu />} />
+            <Route path="/pre-order" element={<PreOrder />} />
             <Route path="/gallery" element={<GalleryPage />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/admin" element={<Admin />} />

@@ -19,3 +19,15 @@ export interface GalleryItem {
   url: string;
   caption: string;
 }
+
+export interface BannerConfig {
+  title: string;
+  subtitle: string;
+  backgroundImage: string;
+}
+
+export interface SiteSettings {
+  logoUrl: string;
+  restaurantName: string;
+  whatsappNumber: string;
+}
