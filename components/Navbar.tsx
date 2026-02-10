@@ -1,23 +1,29 @@
 
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import { initialSettings } from '../data/menu';
+import { SiteSettings } from '../types';
 
 const Navbar: React.FC = () => {
   const location = useLocation();
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [settings, setSettings] = useState<SiteSettings>(initialSettings);
 
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 30);
-    };
+    const handleScroll = () => setIsScrolled(window.scrollY > 30);
     window.addEventListener('scroll', handleScroll);
+    
+    const savedSettings = localStorage.getItem('batachi_settings');
+    if (savedSettings) setSettings(JSON.parse(savedSettings));
+
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   const navLinks = [
     { path: '/', name: 'Beranda' },
     { path: '/menu', name: 'Menu' },
+    { path: '/pre-order', name: 'Pre-Order' },
     { path: '/gallery', name: 'Galeri' },
     { path: '/contact', name: 'Kontak' },
   ];
@@ -29,19 +35,23 @@ const Navbar: React.FC = () => {
       isScrolled || isAdmin ? 'glass-nav py-4 shadow-2xl' : 'bg-transparent py-10'
     }`}>
       <div className="max-w-7xl mx-auto px-6 md:px-12 flex justify-between items-center gap-8">
-        {/* Logo Section */}
         <div className="flex-shrink-0">
           <Link to="/" className="flex flex-col group">
-            <span className="text-2xl md:text-3xl font-bold tracking-[0.25em] font-serif leading-none group-hover:text-gold transition-all duration-500 text-white">
-              BATACHI<span className="text-gold">.</span>
-            </span>
-            <span className="text-[7px] md:text-[8px] uppercase tracking-[0.4em] text-gold/60 mt-2 font-bold opacity-70">
-              Cuisine & Hospitality
-            </span>
+            {settings.logoUrl ? (
+              <img src={settings.logoUrl} alt={settings.restaurantName} className="h-12 md:h-16 w-auto object-contain" />
+            ) : (
+              <>
+                <span className="text-2xl md:text-3xl font-bold tracking-[0.25em] font-serif leading-none group-hover:text-gold transition-all duration-500 text-white">
+                  {settings.restaurantName}<span className="text-gold">.</span>
+                </span>
+                <span className="text-[7px] md:text-[8px] uppercase tracking-[0.4em] text-gold/60 mt-2 font-bold opacity-70">
+                  Cuisine & Hospitality
+                </span>
+              </>
+            )}
           </Link>
         </div>
 
-        {/* Desktop Navigation Center */}
         <div className="hidden lg:flex flex-1 justify-center gap-10">
           {navLinks.map((link) => (
             <Link
@@ -57,16 +67,13 @@ const Navbar: React.FC = () => {
           ))}
         </div>
 
-        {/* Right Action */}
         <div className="flex items-center gap-6 flex-shrink-0">
-          <a 
-            href="https://wa.me/628123456789" 
-            target="_blank"
-            rel="noopener noreferrer"
+          <Link 
+            to="/pre-order"
             className="hidden sm:inline-block px-10 py-3.5 bg-gold text-black rounded-full text-[9px] font-bold hover:scale-105 transition-all duration-500 uppercase tracking-[0.3em] gold-shadow"
           >
-            Reservasi
-          </a>
+            Pesan PO
+          </Link>
           
           <button 
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -81,7 +88,6 @@ const Navbar: React.FC = () => {
         </div>
       </div>
 
-      {/* Mobile Menu */}
       <div className={`lg:hidden fixed inset-0 z-[90] bg-black transition-all duration-700 ease-in-out ${mobileMenuOpen ? 'translate-x-0' : 'translate-x-full'}`}>
         <div className="flex flex-col items-center justify-center h-full gap-10">
           {navLinks.map((link) => (
@@ -94,12 +100,13 @@ const Navbar: React.FC = () => {
               {link.name}
             </Link>
           ))}
-          <a 
-            href="https://wa.me/628123456789"
+          <Link 
+            to="/pre-order"
+            onClick={() => setMobileMenuOpen(false)}
             className="mt-8 px-14 py-5 bg-gold text-black rounded-full text-[10px] font-bold uppercase tracking-widest"
           >
-            WhatsApp Kami
-          </a>
+            Sistem PO
+          </Link>
           <button onClick={() => setMobileMenuOpen(false)} className="mt-16 text-gray-500 uppercase text-[9px] tracking-widest">Tutup</button>
         </div>
       </div>
